@@ -1,8 +1,9 @@
 import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AnimatedIcon } from '@/components/animated-icon';
+import { replaySplash } from '@/components/splash-screen';
 import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -53,6 +54,16 @@ export default function HomeScreen() {
             title="Fresh start"
             hint={<ThemedText type="code">npm run reset-project</ThemedText>}
           />
+          {__DEV__ && (
+            <HintRow
+              title="Splash screen"
+              hint={
+                <Pressable onPress={replaySplash} accessibilityRole="button">
+                  <ThemedText type="linkPrimary">Tap to replay splash</ThemedText>
+                </Pressable>
+              }
+            />
+          )}
         </ThemedView>
 
         {Platform.OS === 'web' && <WebBadge />}

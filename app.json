@@ -26,9 +26,16 @@
     "plugins": [
       "expo-router",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow DatalakeApp to use the camera for face verification.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0A0F1E",
           "android": {
             "image": "./assets/images/splash-icon.png",
             "imageWidth": 76
