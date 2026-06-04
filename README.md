@@ -1,42 +1,96 @@
-
 # NHAI SecureID – Offline Facial Authentication System for Remote Operations
 
 A fully offline, edge AI-powered face authentication and attendance system with anti-spoofing,
-liveness detection, and cloud sync capability
+liveness detection, and cloud sync capability for secure and efficient biometric authentication in remote environments.
 
-# Team Details 
-## Team Name 
- MetriX
+<svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1">
+      <stop offset="0%" stop-color="#0b1d3a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="300" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="500" y="120" font-size="48" fill="white" text-anchor="middle" font-family="Arial">
+    NHAI × MetriX
+  </text>
+
+  <!-- Subtitle -->
+  <text x="500" y="170" font-size="20" fill="#b0c4de" text-anchor="middle" font-family="Arial">
+    Edge AI Powered Offline Face Authentication System
+  </text>
+
+  <!-- Tags -->
+  <text x="500" y="220" font-size="18" fill="#7ec8e3" text-anchor="middle" font-family="Arial">
+    Secure • Offline • Lightweight • Datalake 3.0 Ready
+  </text>
+
+  <!-- Left placeholder (NHAI logo area) -->
+  <rect x="40" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
+  <text x="100" y="150" font-size="14" fill="white" text-anchor="middle">NHAI LOGO</text>
+
+  <!-- Right placeholder (MetriX) -->
+  <rect x="840" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
+  <text x="900" y="150" font-size="14" fill="white" text-anchor="middle">METRIX</text>
+</svg>
+
+## Team Details 
+### Team Title
+ **MetriX**
+ **[ Precision AI Solutions for Real-World Challenges ]**
  
-## Contributers 
- BK ATHINA 
+### Contributors 
 
- ROSHAN PATEL 
+ - **ROSHAN PATEL** - System Architecture & Solution Design
+ - **BK ATHINA** - Frontend Development & UI/UX Design
+ - **HANISHA GOVINDARAJ** - Integration and Documentation
+ - **NITHEESH S** - AI Research and Model Selection
+ - **VIPUL RAJ SHAH** - AI Model Training and Optimization
 
- VIPUL RAJ SHAH
+ <a href="https://github.com/MediaTrex/NHAI-Innovation-Hackathon-7.0/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=MediaTrex/NHAI-Innovation-Hackathon-7.0"  />
+</a>
 
- NITHEESH S
- 
- HANISHA GOVINDARAJ
+## Project Screenshots & Video Links
+
+**NHAI SecureID**
+
+<table>
+  <tr>
+    <td align="center"><img src="./docs/images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
+    <td align="center"><img src="./docs/images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
+    <td align="center"><img src="./docs/images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
+    <td align="center"><img src="./docs/images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
+  </tr>
+</table>
 
 
-# Problem Statement & Research Insights
-Modern biometric authentication systems depend heavily on cloud infrastructure and stable internet
-connectivity. This creates limitations in remote environments including unreliable connectivity,
-spoofing risks, and high latency.
-## Key insights:
- Face recognition alone is insufficient without liveness detection. Edge AI is essential
-for deployment. Model compression is required for mobile efficiency. Offline-first systems are critical
-for field operations.
+### Live Demo
 
-# Solution Approach 
- The system implements a multi-layer offline biometric pipeline.
-1. Face detection using MediaPipe with landmark validation and quality checks.
-2. Anti-spoofing using MiniFASNet to detect fake inputs.
-3. Active liveness detection using blink, head movement, and smile verification.
-4. Face recognition using MobileFaceNet with 512-D embeddings and Euclidean distance
-matching.
-5. Offline attendance storage using SQLite with automatic cloud sync when online
+[NHAI SecureID Demo Video link](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)
+
+## Problem Statement & Research Insights
+
+The problem statement focuses on developing a secure, lightweight, and fully offline facial recognition and liveness detection system for authenticating field personnel in remote and zero-network environments. The solution must operate efficiently on standard mid-range mobile devices, provide authentication in less than one second, achieve more than 95% accuracy, and integrate seamlessly with the existing Datalake 3.0 . The system should also include anti-spoofing measures, encrypted local storage, and offline-to-online synchronization capability.
+
+## Solution Approach 
+
+NHAI SecureID is a lightweight offline facial recognition and liveness detection system developed for secure field personnel authentication in remote and zero-network environments. The solution uses MediaPipe Face Detection, MiniFASNet Anti-Spoofing, Blink Verification, and MobileFaceNet-based facial recognition to provide fast and accurate identity verification on standard mobile devices. Optimized TensorFlow Lite (.tflite) models ensure sub-second authentication with a compact AI footprint under 20 MB. Built using React Native, the application supports Android and iOS, stores encrypted facial embeddings locally using SQLite, and includes offline attendance logging with AWS sync and purge capability for seamless integration with Datalake 3.0.
+
+For more solution details visit : [NHAI SecureID Solution Documentation](./docs/NHAI_SecureID_Solution.pdf)
+
+## Project Demo
+
+![UI Walkthrough](./docs/images/solutions.gif)
+
+---
+
+## System Workflow Summary
+
+<image src="./docs/images/system_workflow.png" alt="system workflow summary diagram" width="100%" />
 
 
 # Tech Stack & Reasoning
@@ -55,25 +109,38 @@ matching.
 
 # System Design & Workflow 
 
-![face authentication system workflow](readmeassets/rma1.jpeg)
+<div>
+<image src="./docs/images/face_authentication_workflow.jpeg" alt="system architecture diagram" width="100%" height="700px" />
+</div>
 
-![enrollment workflow](readmeassets/rma2.jpeg)
+<div style="display: flex; flex-direction: row; gap: 20px; margin-top: 20px;">
 
-![authentication workflow](readmeassets/rma3.jpeg)
+<image src="./docs/images/enrollment_workflow.jpeg" alt="enrollment workflow diagram" width="100%" height="300px" />
+<image src="./docs/images/authentication_workflow.jpeg" alt="authentication workflow diagram" width="100%" height="300px" />
+
+</div>
 
 
+## Key Features & Functionalities
 
-# Key Features & Innovation
- 1. Fully offline authentication system with edge AI inference.
- 2. Anti-spoofing and active liveness verification.
- 3. Sub-second authentication latency and encrypted local storage.
- 4. Cross-platform Android and iOS support.
- 5. Automatic offline-to-online synchronization.
-  
+1. Fully Offline Facial Authentication System designed for zero-network and remote field environments.
+2. AI-powered Face Recognition using MobileFaceNet for fast and accurate employee verification.
+3. Multi-layer Security Architecture including MiniFASNet Anti-Spoofing and Active Liveness Detection (Blink, Smile, Head Turn Verification).
+4.	Lightweight Edge AI Models optimized using Quantization and TensorFlow Lite (.tflite) conversion with total model size under ~20 MB.
+5. Real-time Authentication in less than 1 second on standard mid-range Android and iOS devices without GPU dependency.
+6. Encrypted Local Face Embedding Storage using SQLite to ensure privacy and secure offline identity verification.
+7. Offline Attendance Logging with Sync & Purge mechanism for automatic AWS synchronization when internet connectivity is restored.
+8. Cross-platform React Native Integration with modular plugin-based architecture for seamless deployment into Datalake 3.0 and other enterprise applications.
 
 # Future Scope & Scalability
-1. Scalable enterprise and government deployment.
-2. Federated learning and transformer-based face models.
-3. Blockchain-based attendance records.
-4. IoT and wearable integration.
-5. Continuous adaptive learning for improved accuracy.
+1) **Thermal Core Integration**<br>
+Adding support for companion thermal imaging hardware to track core body heat alongside face authentication for physical access checkpoints.
+2) **On-Device Continuous Learning** <br>
+Upgrading edge model components to subtly adapt local face embeddings over time, accounting for natural employee aging or facial hair growth without cloud re-training.
+3) **Predictive Offline Sync Scheduling** <br>
+Embedding machine learning algorithms to predict local network restoration patterns, scheduling uploads during optimal signal windows to preserve mobile battery health.
+4) **Multi-Model Biometric Expansion** <br>
+Extend the system beyond facial recognition by integrating additional on-device biometric signals such as voice recognition or gait analysis, enabling stronger multi-factor authentication in high-security zones without increasing hardware dependency.
+
+## Conclusion
+We hereby declare that the proposed solution, NHAI SecureID delivers a robust, lightweight, and fully offline AI-based facial authentication system tailored for remote highway workforce verification. With its edge AI architecture, encrypted biometric storage, and sub-second processing, it ensures high accuracy and reliability in zero-network environments. Its modular, plugin-based SDK design enables seamless integration with Datalake 3.0 without major system changes. Combined with secure offline-to-online sync and scalable architecture, this solution is a practical, future-ready, and highly efficient choice for nationwide deployment.
