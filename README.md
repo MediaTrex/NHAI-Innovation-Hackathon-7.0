@@ -80,10 +80,10 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 <image src="./docs/images/face_authentication_workflow.jpeg" alt="system architecture diagram" width="100%" height="700px" />
 </div><br>
 
-<div style="display: flex; flex-direction: column; margin-top: 20px;">
+<div style="display: flex; flex-direction: row; gap: 20px; margin-top: 20px; flex-wrap: wrap; align-items: flex-start;">
 
-<image src="./docs/images/enrollment_workflow.jpeg" alt="enrollment workflow diagram" width="50%" height="500px" />
-<image src="./docs/images/authentication_workflow.jpeg" alt="authentication workflow diagram" width="50%" height="500px" />
+<image src="./docs/images/enrollment_workflow.jpeg" alt="enrollment workflow diagram" style="width:48%;height:500px;object-fit:contain;" />
+<image src="./docs/images/authentication_workflow.jpeg" alt="authentication workflow diagram" style="width:48%;height:500px;object-fit:contain;" />
 
 </div>
 
