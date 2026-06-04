@@ -77,7 +77,7 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 # System Design & Workflow 
 
 <div>
-<image src="./docs/images/face_authentication_workflow.jpeg" alt="system architecture diagram" width="100%" height="700px" />
+<image src="./docs/images/face_authentication_workflow.jpeg" alt="system architecture diagram" width="96%" height="700px" />
 </div><br>
 
 <div style="display: flex; flex-direction: row; gap: 20px; margin-top: 20px; flex-wrap: wrap; align-items: flex-start;">
