@@ -3,39 +3,7 @@
 A fully offline, edge AI-powered face authentication and attendance system with anti-spoofing,
 liveness detection, and cloud sync capability for secure and efficient biometric authentication in remote environments.
 
-<svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bg" x1="0" x2="1">
-      <stop offset="0%" stop-color="#0b1d3a"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="1000" height="300" fill="url(#bg)"/>
-
-  <!-- Title -->
-  <text x="500" y="120" font-size="48" fill="white" text-anchor="middle" font-family="Arial">
-    NHAI × MetriX
-  </text>
-
-  <!-- Subtitle -->
-  <text x="500" y="170" font-size="20" fill="#b0c4de" text-anchor="middle" font-family="Arial">
-    Edge AI Powered Offline Face Authentication System
-  </text>
-
-  <!-- Tags -->
-  <text x="500" y="220" font-size="18" fill="#7ec8e3" text-anchor="middle" font-family="Arial">
-    Secure • Offline • Lightweight • Datalake 3.0 Ready
-  </text>
-
-  <!-- Left placeholder (NHAI logo area) -->
-  <rect x="40" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
-  <text x="100" y="150" font-size="14" fill="white" text-anchor="middle">NHAI LOGO</text>
-
-  <!-- Right placeholder (MetriX) -->
-  <rect x="840" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
-  <text x="900" y="150" font-size="14" fill="white" text-anchor="middle">METRIX</text>
-</svg>
+![Banner Image](./docs/images/banner.svg)
 
 ## Team Details 
 ### Team Title
@@ -86,7 +54,6 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 
 ![UI Walkthrough](./docs/images/solutions.gif)
 
----
 
 ## System Workflow Summary
 
@@ -111,12 +78,12 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 
 <div>
 <image src="./docs/images/face_authentication_workflow.jpeg" alt="system architecture diagram" width="100%" height="700px" />
-</div>
+</div><br>
 
-<div style="display: flex; flex-direction: row; gap: 20px; margin-top: 20px;">
+<div style="display: flex; flex-direction: column; margin-top: 20px;">
 
-<image src="./docs/images/enrollment_workflow.jpeg" alt="enrollment workflow diagram" width="100%" height="300px" />
-<image src="./docs/images/authentication_workflow.jpeg" alt="authentication workflow diagram" width="100%" height="300px" />
+<image src="./docs/images/enrollment_workflow.jpeg" alt="enrollment workflow diagram" width="50%" height="500px" />
+<image src="./docs/images/authentication_workflow.jpeg" alt="authentication workflow diagram" width="50%" height="500px" />
 
 </div>
 
