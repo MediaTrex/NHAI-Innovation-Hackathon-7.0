@@ -94,7 +94,7 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 
 ## Project Demo
 
-![UI Walkthrough](./docs/images/solution.gif)
+<image src="./docs/images/solution.gif" alt="demo image" width="100%" height="600px" />
 
 
 ## System Workflow Summary
