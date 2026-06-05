@@ -13,40 +13,7 @@ import {
 ExpoSplashScreen.preventAutoHideAsync().catch(() => {});
 
 const FADE_DURATION_MS = 800;
-const MIN_VISIBLE_MS = 4000;
 const useNativeDriver = Platform.OS !== 'web';
-
-let replaySplashHandler: (() => void) | null = null;
-
-/** Resets splash from root layout (Settings → replay). */
-export function setSplashReplayHandler(handler: (() => void) | null) {
-  replaySplashHandler = handler;
-}
-
-export function replaySplash() {
-  replaySplashHandler?.();
-}
-
-type SplashOverlayProps = {
-  onFinish?: () => void;
-};
-
-/** Full-screen overlay (not Modal — more reliable on iOS dev builds). */
-export function SplashOverlay({ onFinish }: SplashOverlayProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onFinish?.();
-    }, MIN_VISIBLE_MS);
-
-    return () => clearTimeout(timer);
-  }, [onFinish]);
-
-  return (
-    <View style={styles.overlay} pointerEvents="auto">
-      <SplashScreenContent />
-    </View>
-  );
-}
 
 function FeaturePill({ icon, label }: { icon: string; label: string }) {
   return (
@@ -57,7 +24,7 @@ function FeaturePill({ icon, label }: { icon: string; label: string }) {
   );
 }
 
-function SplashScreenContent() {
+export function SplashScreenContent() {
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [ready, setReady] = useState(false);
@@ -101,12 +68,12 @@ function SplashScreenContent() {
         </View>
 
         <Text style={styles.title}>NHAI SecureID</Text>
-        <Text style={styles.subtitle}>Offline Facial Authentication System</Text>
+        <Text style={styles.subtitle}>Offline Face Authentication for Field Personnel</Text>
 
         <View style={styles.pillRow}>
           <FeaturePill icon="📴" label="Offline" />
           <FeaturePill icon="🛡️" label="Secure" />
-          <FeaturePill icon="👤" label="Private" />
+          <FeaturePill icon="✓" label="Reliable" />
         </View>
       </Animated.View>
 
@@ -119,7 +86,7 @@ function SplashScreenContent() {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          Powered by <Text style={styles.footerBold}>Innovation</Text>
+          Powered by <Text style={styles.footerBold}>NHAI-AI</Text>
         </Text>
         <Text style={styles.footerSub}>Built for a Connected India</Text>
       </View>
@@ -130,11 +97,6 @@ function SplashScreenContent() {
 export default SplashScreenContent;
 
 const styles = StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 9999,
-    elevation: 9999,
-  },
   gradient: {
     flex: 1,
     alignItems: 'center',

@@ -9,7 +9,15 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.anonymous.DatalakeApp"
+      "bundleIdentifier": "com.anonymous.DatalakeApp",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        },
+        "MetroHost": "192.168.1.4",
+        "NSLocalNetworkUsageDescription": "NHAI SecureID connects to your Mac to load the app during development.",
+        "NSBonjourServices": ["_http._tcp"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +38,12 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "NHAI SecureID needs camera access for face enrollment and authentication."
+        }
+      ],
       "expo-sqlite",
       [
         "expo-splash-screen",
@@ -43,6 +57,9 @@
       ],
       "expo-sqlite"
     ],
+    "extra": {
+      "faceApiUrl": "http://192.168.1.4:8000"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

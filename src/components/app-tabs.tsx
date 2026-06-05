@@ -20,16 +20,16 @@ export default function AppTabs() {
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Explore</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="enroll">
+        <NativeTabs.Trigger.Label>Enroll</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
 
-      <NativeTabs.Trigger name="face-auth">
-        <NativeTabs.Trigger.Label>Face auth</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="authenticate">
+        <NativeTabs.Trigger.Label>Auth</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/explore.png')}
           renderingMode="template"

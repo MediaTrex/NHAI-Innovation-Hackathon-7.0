@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const tabs = [
-  { href: '/', label: 'Home', icon: '🏠' },
+  { href: '/home', label: 'Home', icon: '🏠' },
   { href: '/enroll', label: 'Enroll', icon: '👤' },
   { href: '/records', label: 'Logs', icon: '📋' },
   { href: '/settings', label: 'Settings', icon: '⚙️' },
@@ -21,7 +21,10 @@ export function BottomNav() {
     >
       <View className="flex-row items-center justify-around py-2">
         {tabs.map((tab) => {
-          const active = pathname === tab.href || (tab.href !== '/' && pathname.startsWith(tab.href));
+          const active =
+            pathname === tab.href ||
+            (tab.href === '/home' && pathname === '/') ||
+            (tab.href !== '/home' && pathname.startsWith(tab.href));
           return (
             <Pressable
               key={tab.href}
