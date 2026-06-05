@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { AuthCamera } from '@/components/auth-camera';
+import { FacialRecognitionCss } from '@/components/facial-recognition-css';
 import { FaceScanFrame } from '@/components/face-scan-frame';
 import { embeddingToJson, parseEmbeddingJson, VERIFY_THRESHOLD } from '@/lib/embedding';
 import { embedFaceFromUri, FaceApiError, verifyFaceFromUri } from '@/lib/face-api';
@@ -40,116 +41,33 @@ function formatTime(d: Date) {
 
 const PARTICLE_COLORS = ['#22C55E', '#1877F2', '#FBBF24', '#A855F7', '#EC4899', '#14B8A6', '#F97316', '#6366F1'];
 
-const FACE_W = 200;
-const FACE_H = 220;
-const ACCENT = '#1877F2';
-
-const MESH_POINTS: { x: number; y: number }[] = [
-  { x: 75, y: 10 }, { x: 100, y: 5 }, { x: 125, y: 10 },
-  { x: 56, y: 44 }, { x: 100, y: 36 }, { x: 144, y: 44 },
-  { x: 66, y: 77 }, { x: 86, y: 74 }, { x: 114, y: 74 }, { x: 134, y: 77 },
-  { x: 100, y: 110 }, { x: 44, y: 112 }, { x: 156, y: 112 },
-  { x: 82, y: 143 }, { x: 118, y: 143 },
-  { x: 58, y: 174 }, { x: 142, y: 174 }, { x: 100, y: 190 },
-];
-
-const MESH_LINES: [number, number][] = [
-  [0, 3], [1, 3], [1, 4], [1, 5], [2, 5], [3, 4], [4, 5],
-  [3, 6], [5, 9], [6, 7], [7, 10], [8, 10], [8, 9],
-  [3, 11], [5, 12], [11, 15], [12, 16], [10, 13], [10, 14],
-  [13, 17], [14, 17], [15, 17], [16, 17],
-];
-
-function MeshLine({
-  from, to, opacity,
-}: {
-  from: { x: number; y: number };
-  to: { x: number; y: number };
-  opacity: Animated.AnimatedInterpolation<string | number>;
-}) {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const length = Math.sqrt(dx * dx + dy * dy);
-  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-  const cx = (from.x + to.x) / 2;
-  const cy = (from.y + to.y) / 2;
-  return (
-    <Animated.View
-      style={{
-        position: 'absolute',
-        left: cx - length / 2,
-        top: cy - 0.5,
-        width: length,
-        height: 1.5,
-        backgroundColor: ACCENT,
-        opacity,
-        transform: [{ rotate: `${angle}deg` }],
-      }}
-    />
-  );
-}
+const ACCENT = '#00D4FF';
+const ACCENT_DARK = '#0099CC';
 
 function FacialRecognitionPanel({
   checks,
 }: {
   checks: Record<VerifyCheck, 'pending' | 'done' | 'active'>;
 }) {
-  const scanLineAnim = useRef(new Animated.Value(0)).current;
-  const glowAnim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(scanLineAnim, { toValue: 1, duration: 1400, useNativeDriver: true }),
-        Animated.timing(scanLineAnim, { toValue: 0, duration: 0, useNativeDriver: true }),
-      ])
-    ).start();
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowAnim, { toValue: 1, duration: 900, useNativeDriver: true }),
-        Animated.timing(glowAnim, { toValue: 0, duration: 900, useNativeDriver: true }),
-      ])
-    ).start();
-  }, [glowAnim, scanLineAnim]);
-
-  const faceScanY = scanLineAnim.interpolate({ inputRange: [0, 1], outputRange: [-FACE_H / 2, FACE_H / 2] });
-  const dotGlow = glowAnim.interpolate({ inputRange: [0, 1], outputRange: [0.35, 1] });
-
   return (
     <>
-      <Text style={styles.frTitle}>FACIAL RECOGNITION</Text>
-
-      <View style={{ width: FACE_W, height: FACE_H, marginBottom: 28 }}>
-        <View style={styles.faceSilhouette}>
-          <View style={styles.faceOval} />
-        </View>
-        {MESH_LINES.map(([a, b], i) => (
-          <MeshLine key={i} from={MESH_POINTS[a]} to={MESH_POINTS[b]} opacity={dotGlow} />
-        ))}
-        {MESH_POINTS.map((pt, i) => (
-          <Animated.View
-            key={i}
-            style={[styles.meshDot, { left: pt.x - 3, top: pt.y - 3, opacity: dotGlow }]}
-          />
-        ))}
-        <Animated.View
-          style={[styles.faceScanLine, { top: FACE_H / 2, transform: [{ translateY: faceScanY }] }]}
-        />
-      </View>
+      <FacialRecognitionCss height={340} whiteBackground />
 
       <View style={styles.frCheckList}>
         {(['Photo captured', 'Loading enrolled face', 'Comparing faces…'] as const).map((label, i) => {
           const stateKey = (['face', 'comparing', 'matching'] as const)[i];
           const state = checks[stateKey];
+          const done = state === 'done';
+          const active = state === 'active';
           return (
-            <View key={label} style={styles.frCheckRow}>
-              <Text style={styles.frCheckLabel}>{label}</Text>
-              {state === 'done' || state === 'active' ? (
+            <View key={label} style={[styles.frCheckRow, (done || active) && styles.frCheckRowActive]}>
+              <Text style={[styles.frCheckLabel, (done || active) && styles.frCheckLabelActive]}>
+                {label}
+              </Text>
+              {done || active ? (
                 <View style={styles.frCheckRight}>
-                  <Text style={styles.frCheckMark}>✓</Text>
-                  {state === 'active' && (
-                    <ActivityIndicator size="small" color={ACCENT} style={{ marginLeft: 6 }} />
-                  )}
+                  {done && <Text style={styles.frCheckMark}>✓</Text>}
+                  {active && <ActivityIndicator size="small" color={ACCENT} />}
                 </View>
               ) : (
                 <View style={styles.checkPending} />
@@ -471,7 +389,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
-    paddingTop: 28,
+    paddingTop: 20,
   },
   whiteBottom: {
     paddingHorizontal: 16,
@@ -481,68 +399,41 @@ const styles = StyleSheet.create({
     borderTopColor: '#E4E6EB',
     backgroundColor: '#FFFFFF',
   },
-  frTitle: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: ACCENT,
-    letterSpacing: 4,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  faceSilhouette: {
-    position: 'absolute',
-    width: FACE_W,
-    height: FACE_H,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  faceOval: {
-    width: 130,
-    height: 170,
-    borderRadius: 65,
-    borderWidth: 2,
-    borderColor: 'rgba(24,119,242,0.35)',
-    backgroundColor: 'rgba(24,119,242,0.06)',
-  },
-  meshDot: {
-    position: 'absolute',
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: ACCENT,
-  },
-  faceScanLine: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 2,
-    backgroundColor: 'rgba(24,119,242,0.7)',
-  },
-  frCheckList: { width: '100%', gap: 14, marginBottom: 20 },
+  frCheckList: { width: '100%', gap: 10, marginBottom: 18, marginTop: 8 },
   frCheckRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#EEF2F6',
   },
-  frCheckLabel: { fontSize: 15, fontWeight: '600', color: '#050505' },
-  frCheckRight: { flexDirection: 'row', alignItems: 'center' },
+  frCheckRowActive: {
+    backgroundColor: '#F0FBFF',
+    borderColor: 'rgba(0,212,255,0.35)',
+  },
+  frCheckLabel: { fontSize: 14, fontWeight: '600', color: '#65676B' },
+  frCheckLabelActive: { color: ACCENT_DARK, fontWeight: '700' },
+  frCheckRight: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   frCheckMark: { color: ACCENT, fontSize: 18, fontWeight: '800' },
   frFooter: {
     width: '100%',
-    backgroundColor: '#E7F3FF',
+    backgroundColor: '#F0FBFF',
     borderRadius: 12,
-    padding: 12,
+    padding: 14,
     borderWidth: 1,
-    borderColor: 'rgba(24,119,242,0.25)',
+    borderColor: 'rgba(0,212,255,0.3)',
   },
-  frFooterText: { fontSize: 12, color: ACCENT, fontWeight: '600', textAlign: 'center' },
+  frFooterText: { fontSize: 12, color: ACCENT_DARK, fontWeight: '600', textAlign: 'center' },
   checkPending: {
     width: 18,
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: '#CED0D4',
+    borderColor: '#D1D5DB',
   },
   thumbLabel: {
     fontSize: 12,
@@ -558,7 +449,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     borderWidth: 2,
-    borderColor: '#1877F2',
+    borderColor: ACCENT,
     backgroundColor: '#F5F7FA',
   },
   thumbImage: { width: '100%', height: '100%' },
