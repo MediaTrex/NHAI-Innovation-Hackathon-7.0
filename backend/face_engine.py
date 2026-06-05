@@ -1,5 +1,7 @@
-"""
+""" NHAI Hackathon 7.0 - Face Engine API
+
 Face engine adapted from https://github.com/vips725/NHAI_HACK
+
 Uses InsightFace buffalo_s (enroll.py, login.py, load_model.py).
 """
 
@@ -11,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 import cv2
+
 import numpy as np
 
 MODEL_NAME = "buffalo_s"
