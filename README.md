@@ -50,12 +50,12 @@ NHAI SecureID is a lightweight offline facial recognition and liveness detection
 
 For more solution details visit : [NHAI SecureID Solution Documentation](./docs/NHAI_SecureID_Solution.pdf)
 
-## Project Demo
+# Project Demo
 
 ![UI Walkthrough](./docs/images/solutions.gif)
 
 
-## System Workflow Summary
+## System Workflow Summary 
 
 <image src="./docs/images/system_workflow.png" alt="system workflow summary diagram" width="100%" />
 
