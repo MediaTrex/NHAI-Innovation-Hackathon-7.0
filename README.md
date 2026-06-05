@@ -26,7 +26,7 @@ liveness detection, and cloud sync capability for secure and efficient biometric
 
 [Project Proposal Document](https://drive.google.com/file/d/1x-rp1tM_0sm04BD-pEfnAsYCl7bTPXmS/view?usp=drive_link)
 
-## Project Screenshots & Video Links
+# Project Screenshots & Video Links
 
 **NHAI SecureID**
 
