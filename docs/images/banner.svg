@@ -1,0 +1,33 @@
+<svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1">
+      <stop offset="0%" stop-color="#0b1d3a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1000" height="300" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="500" y="120" font-size="48" fill="white" text-anchor="middle" font-family="Arial">
+    NHAI × MetriX
+  </text>
+
+  <!-- Subtitle -->
+  <text x="500" y="170" font-size="20" fill="#b0c4de" text-anchor="middle" font-family="Arial">
+    Edge AI Powered Offline Face Authentication System
+  </text>
+
+  <!-- Tags -->
+  <text x="500" y="220" font-size="18" fill="#7ec8e3" text-anchor="middle" font-family="Arial">
+    Secure • Offline • Lightweight • Datalake 3.0 Ready
+  </text>
+
+  <!-- Left placeholder (NHAI logo area) -->
+  <rect x="40" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
+  <text x="100" y="150" font-size="14" fill="white" text-anchor="middle">NHAI</text>
+
+  <!-- Right placeholder (MetriX) -->
+  <rect x="840" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
+  <text x="900" y="150" font-size="14" fill="white" text-anchor="middle">MetriX</text>
+</svg>
