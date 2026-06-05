@@ -22,23 +22,65 @@ liveness detection, and cloud sync capability for secure and efficient biometric
   <img src="https://contributors-img.web.app/image?repo=MediaTrex/NHAI-Innovation-Hackathon-7.0"  />
 </a>
 
+## Project Proposal & Documentation
+
+- [Project Proposal Document](https://drive.google.com/file/d/1QHi7vjjb1-VKTbFL4a-rizmfZnsIZ25h/view?usp=drive_link)
+
 ## Project Screenshots & Video Links
 
 **NHAI SecureID**
 
 <table>
   <tr>
-    <td align="center"><img src="./docs/images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
-    <td align="center"><img src="./docs/images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
-    <td align="center"><img src="./docs/images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
-    <td align="center"><img src="./docs/images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
+    <td align="center">
+      <img src="./docs/screenshots/1.jpeg" width="160" alt="Splash"><br>
+      <strong>1. Splash</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/2.jpeg" width="160" alt="Login"><br>
+      <strong>2. Login</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/3.jpeg" width="160" alt="Dashboard"><br>
+      <strong>3. Dashboard</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/4.jpeg" width="160" alt="Enrollment"><br>
+      <strong>4. Enrollment</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/5.jpeg" width="160" alt="Verification"><br>
+      <strong>5. Verification</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="./docs/screenshots/6.jpeg" width="160" alt="Enrolled"><br>
+      <strong>6. Enrolled</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/7.jpeg" width="160" alt="Attendance"><br>
+      <strong>7. Attendance</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/8.jpeg" width="160" alt="Verification"><br>
+      <strong>8. Verification</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/9.jpeg" width="160" alt="Approve"><br>
+      <strong>9. Approve</strong>
+    </td>
+    <td align="center">
+      <img src="./docs/screenshots/10.jpeg" width="160" alt="Records"><br>
+      <strong>10. Records</strong>
+    </td>
   </tr>
 </table>
 
 
 ### Live Demo
 
-[NHAI SecureID Demo Video link](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)
+[NHAI SecureID Demo Video link](https://drive.google.com/file/d/1i5pEl9GFcMXz55crCaSI56OVVqh91EXF/view?usp=sharing)
 
 ## Problem Statement & Research Insights
 
@@ -52,7 +94,7 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 
 ## Project Demo
 
-![UI Walkthrough](./docs/images/solutions.gif)
+![UI Walkthrough](./docs/images/solution.gif)
 
 
 ## System Workflow Summary
