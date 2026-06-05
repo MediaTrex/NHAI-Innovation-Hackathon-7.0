@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     opacity: 0.85,
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.four,
