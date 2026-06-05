@@ -15,11 +15,15 @@ import {
 } from '@/lib/face-api';
 import { connectFaceApi } from '@/lib/face-settings';
 import {
-  getAllEmployees,
+  getEnrolledEmployees,
   initDatabase,
   updateEmployeeEmbedding,
   type Employee,
 } from '@/lib/database';
+
+function isEnrolledWithPhoto(emp: Employee) {
+  return !!emp.face_front_path && !emp.face_front_path.startsWith('mock://');
+}
 
 type BackfillResult = {
   updated: Employee[];
@@ -71,22 +75,19 @@ export default function AuthenticateScreen() {
     try {
       await initDatabase();
       const { ok: apiOk, url } = await connectFaceApi();
-      const list = await getAllEmployees();
+      const enrolled = await getEnrolledEmployees();
       setApiUrl(url);
       setApiOnline(apiOk);
 
-      const withPhotos = list.filter((e) => e.face_front_path);
-      const { updated: refreshed } = await backfillEmbeddings(list, apiOk);
-      const withEmbedding = refreshed.filter((e) => e.face_embedding);
-      const needsModel = withPhotos.filter(
-        (e) => !refreshed.find((r) => r.employee_id === e.employee_id)?.face_embedding
-      );
+      const { updated: refreshed } = await backfillEmbeddings(enrolled, apiOk);
+      const ready = refreshed.filter(isEnrolledWithPhoto);
+      const needsModel = ready.filter((e) => !e.face_embedding);
 
-      setEmployees(withEmbedding);
+      setEmployees(ready);
       setPendingPhotos(needsModel);
       setSelectedId((prev) => {
-        if (prev && withEmbedding.some((e) => e.employee_id === prev)) return prev;
-        return withEmbedding[0]?.employee_id ?? null;
+        if (prev && ready.some((e) => e.employee_id === prev)) return prev;
+        return ready[0]?.employee_id ?? null;
       });
     } finally {
       setLoading(false);
@@ -113,18 +114,23 @@ export default function AuthenticateScreen() {
         return;
       }
 
-      const all = await getAllEmployees();
-      const { updated: refreshed, errors } = await backfillEmbeddings(all, true);
-      const withEmbedding = refreshed.filter((e) => e.face_embedding);
-      const needsModel = refreshed.filter((e) => e.face_front_path && !e.face_embedding);
+      const enrolled = await getEnrolledEmployees();
+      const { updated: refreshed, errors } = await backfillEmbeddings(enrolled, true);
+      const ready = refreshed.filter(isEnrolledWithPhoto);
+      const needsModel = ready.filter((e) => !e.face_embedding);
 
-      setEmployees(withEmbedding);
+      setEmployees(ready);
       setPendingPhotos(needsModel);
 
-      if (errors.length > 0 && withEmbedding.length === 0) {
+      if (errors.length > 0 && ready.length === 0) {
         Alert.alert('Build failed', errors.map((e) => `${e.name}: ${e.reason}`).join('\n'));
-      } else if (withEmbedding.length > 0) {
-        Alert.alert('Ready', `${withEmbedding.length} worker(s) can authenticate.`);
+      } else if (needsModel.length === 0 && ready.length > 0) {
+        Alert.alert('Ready', `${ready.length} worker(s) can authenticate.`);
+      } else if (needsModel.length > 0) {
+        Alert.alert(
+          'Partially ready',
+          `${ready.length - needsModel.length} ready · ${needsModel.length} still need face models.`
+        );
       }
     } catch (e) {
       Alert.alert('Error', e instanceof FaceApiError ? e.message : 'Could not build models.');
@@ -175,20 +181,48 @@ export default function AuthenticateScreen() {
           Face API: {apiStatusText}
         </Text>
         {!loading && !apiOnline && (
-          <Pressable onPress={load} className="mt-2 self-start rounded-lg bg-[#E7F3FF] px-3 py-1.5">
-            <Text className="text-xs font-bold text-[#1877F2]">↻ Retry connection</Text>
-          </Pressable>
+          <View className="mt-2 flex-row flex-wrap gap-2">
+            <Pressable onPress={load} className="rounded-lg bg-[#E7F3FF] px-3 py-1.5">
+              <Text className="text-xs font-bold text-[#1877F2]">↻ Retry</Text>
+            </Pressable>
+            <Pressable
+              onPress={async () => {
+                setLoading(true);
+                try {
+                  const { ok, url } = await connectFaceApi();
+                  setApiUrl(url);
+                  setApiOnline(ok);
+                  Alert.alert(
+                    ok ? 'Face API online' : 'Still offline',
+                    ok
+                      ? `Connected to ${url}`
+                      : `Cannot reach Face API.\n\n1. Mac & iPhone on same Wi‑Fi\n2. Start backend on Mac:\ncd DatalakeApp/backend\nsource .venv/bin/activate\nuvicorn main:app --host 0.0.0.0 --port 8000\n\nTrying: ${url}`
+                  );
+                  if (ok) await load();
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="rounded-lg bg-[#1877F2] px-3 py-1.5"
+            >
+              <Text className="text-xs font-bold text-white">Find Face API</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push('/settings')}
+              className="rounded-lg border border-[#E4E6EB] bg-white px-3 py-1.5"
+            >
+              <Text className="text-xs font-bold text-[#65676B]">Settings</Text>
+            </Pressable>
+          </View>
         )}
       </View>
 
       <View className="flex-1 px-4 pt-4">
         {employees.length === 0 ? (
           <Card>
-            <Text className="font-bold text-[#050505]">No enrolled models</Text>
+            <Text className="font-bold text-[#050505]">No enrolled workers</Text>
             <Text className="mt-2 text-sm text-[#65676B]">
-              {pendingPhotos.length > 0
-                ? `${pendingPhotos.length} employee(s) need face models. Build them below.`
-                : 'Enroll an employee first, then return here to authenticate.'}
+              Enroll workers with face capture first. Workers appear here after enrollment.
             </Text>
             <View className="mt-4 gap-2">
               {pendingPhotos.length > 0 && (
@@ -205,6 +239,10 @@ export default function AuthenticateScreen() {
         ) : (
           <Card>
             <Text className="font-bold text-[#050505]">Select worker</Text>
+            <Text className="mt-1 text-xs text-[#65676B]">
+              {employees.length} enrolled
+              {pendingPhotos.length > 0 ? ` · ${pendingPhotos.length} need face model` : ''}
+            </Text>
             <View className="mt-3 flex-row flex-wrap gap-2">
               {employees.map((emp) => (
                 <Pressable

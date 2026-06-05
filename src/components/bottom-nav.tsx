@@ -2,6 +2,8 @@ import { usePathname, useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { notifyHomeStatsRefresh } from '@/lib/app-refresh';
+
 const tabs = [
   { href: '/home', label: 'Home', icon: '🏠' },
   { href: '/enroll', label: 'Enroll', icon: '👤' },
@@ -28,7 +30,10 @@ export function BottomNav() {
           return (
             <Pressable
               key={tab.href}
-              onPress={() => router.push(tab.href as '/')}
+              onPress={() => {
+                router.push(tab.href as '/');
+                if (tab.href === '/home') notifyHomeStatsRefresh();
+              }}
               className="items-center px-3 py-1"
             >
               <Text className="text-xl">{tab.icon}</Text>
