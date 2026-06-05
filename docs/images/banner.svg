@@ -25,9 +25,9 @@
 
   <!-- Left placeholder (NHAI logo area) -->
   <rect x="40" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
-  <text x="100" y="150" font-size="14" fill="white" text-anchor="middle">NHAI LOGO</text>
+  <text x="100" y="150" font-size="14" fill="white" text-anchor="middle">NHAI</text>
 
   <!-- Right placeholder (MetriX) -->
   <rect x="840" y="80" width="120" height="120" fill="#1e3a5f" rx="10"/>
-  <text x="900" y="150" font-size="14" fill="white" text-anchor="middle">METRIX</text>
+  <text x="900" y="150" font-size="14" fill="white" text-anchor="middle">MetriX</text>
 </svg>
