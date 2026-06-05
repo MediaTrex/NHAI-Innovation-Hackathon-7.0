@@ -22,6 +22,7 @@ export default function RootLayout() {
         <Stack.Screen name="home" />
         <Stack.Screen name="enroll" />
         <Stack.Screen name="records" />
+        <Stack.Screen name="workers" />
         <Stack.Screen name="settings" />
         <Stack.Screen name="authenticate" />
         <Stack.Screen name="sync" />
