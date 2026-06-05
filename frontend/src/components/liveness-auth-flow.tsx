@@ -14,7 +14,12 @@ import { AuthCamera } from '@/components/auth-camera';
 import { FaceScanFrame } from '@/components/face-scan-frame';
 import { embeddingToJson, parseEmbeddingJson, VERIFY_THRESHOLD } from '@/lib/embedding';
 import { embedFaceFromUri, FaceApiError, verifyFaceFromUri } from '@/lib/face-api';
-import { initDatabase, markAttendanceVerified, type Employee } from '@/lib/database';
+import {
+  initDatabase,
+  markAttendanceVerified,
+  updateEmployeeEmbedding,
+  type Employee,
+} from '@/lib/database';
 
 type Phase = 'camera' | 'review' | 'verifying' | 'result' | 'failed';
 type VerifyCheck = 'face' | 'comparing' | 'matching';
@@ -266,7 +271,9 @@ export function LivenessAuthFlow({ employee, onDone }: LivenessAuthFlowProps) {
         if (!employee.face_front_path) throw new FaceApiError('No enrolled photo found for this worker.');
         const built = await embedFaceFromUri(employee.face_front_path);
         ref = built.embedding;
-        employee.face_embedding = embeddingToJson(built.embedding);
+        const json = embeddingToJson(built.embedding);
+        employee.face_embedding = json;
+        await updateEmployeeEmbedding(employee.employee_id, json);
       }
 
       setChecks({ face: 'done', comparing: 'done', matching: 'active' });

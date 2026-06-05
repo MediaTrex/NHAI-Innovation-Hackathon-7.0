@@ -1,7 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as SQLite from 'expo-sqlite';
 
-import { DUMMY_WORKERS } from '@/lib/dummy-workers';
+import { seedDemoWorkerEnrollments } from '@/lib/demo-worker-seed';
 
 export type Employee = {
   id: number;
@@ -84,21 +84,10 @@ export async function initDatabase() {
     /* column already exists */
   }
 
-  await seedDummyWorkers();
-}
-
-/** Insert demo worker profiles (metadata only — face capture still required). */
-export async function seedDummyWorkers(): Promise<void> {
-  for (const worker of DUMMY_WORKERS) {
-    const existing = await getEmployeeByEmployeeId(worker.employeeId);
-    if (existing) continue;
-
-    await saveEmployee({
-      employeeId: worker.employeeId,
-      fullName: worker.fullName,
-      department: worker.department,
-      siteLocation: worker.siteLocation,
-    });
+  try {
+    await seedDemoWorkerEnrollments();
+  } catch (e) {
+    console.warn('Demo worker seed skipped:', e);
   }
 }
 
@@ -143,9 +132,9 @@ export async function upsertEmployee(input: EmployeeInput): Promise<number> {
       full_name = ?,
       department = ?,
       site_location = ?,
-      face_front_path = COALESCE(?, face_front_path),
-      face_left_path = COALESCE(?, face_left_path),
-      face_right_path = COALESCE(?, face_right_path),
+      face_front_path = ?,
+      face_left_path = ?,
+      face_right_path = ?,
       face_embedding = COALESCE(?, face_embedding)
     WHERE employee_id = ?`,
     input.fullName.trim(),
@@ -166,6 +155,28 @@ export async function getEmployeeCount(): Promise<number> {
     'SELECT COUNT(*) as count FROM employees'
   );
   return row?.count ?? 0;
+}
+
+export async function getEnrolledEmployeeCount(): Promise<number> {
+  const database = await getDb();
+  const row = await database.getFirstAsync<{ count: number }>(
+    `SELECT COUNT(*) as count FROM employees
+     WHERE face_front_path IS NOT NULL
+       AND face_front_path != ''
+       AND face_front_path NOT LIKE 'mock://%'`
+  );
+  return row?.count ?? 0;
+}
+
+export async function getEnrolledEmployees(): Promise<Employee[]> {
+  const database = await getDb();
+  return database.getAllAsync<Employee>(
+    `SELECT * FROM employees
+     WHERE face_front_path IS NOT NULL
+       AND face_front_path != ''
+       AND face_front_path NOT LIKE 'mock://%'
+     ORDER BY full_name ASC`
+  );
 }
 
 export async function getAllEmployees(): Promise<Employee[]> {
@@ -235,12 +246,40 @@ export async function getTodayAttendanceCount(): Promise<number> {
   return row?.count ?? 0;
 }
 
+/** Unique workers with a verified check-in today. */
+export async function getTodayPresentCount(): Promise<number> {
+  const database = await getDb();
+  const row = await database.getFirstAsync<{ count: number }>(
+    `SELECT COUNT(DISTINCT employee_id) as count FROM attendance
+     WHERE verified = 1 AND date(checked_in_at) = date('now', 'localtime')`
+  );
+  return row?.count ?? 0;
+}
+
 export async function getPendingSyncCount(): Promise<number> {
   const database = await getDb();
   const row = await database.getFirstAsync<{ count: number }>(
     'SELECT COUNT(*) as count FROM attendance WHERE synced = 0'
   );
   return row?.count ?? 0;
+}
+
+export async function getPendingAttendanceRecords(): Promise<AttendanceRecord[]> {
+  const database = await getDb();
+  return database.getAllAsync<AttendanceRecord>(
+    'SELECT * FROM attendance WHERE synced = 0 ORDER BY checked_in_at ASC'
+  );
+}
+
+export async function markAttendanceRecordsSynced(ids: number[]): Promise<number> {
+  if (ids.length === 0) return 0;
+  const database = await getDb();
+  const placeholders = ids.map(() => '?').join(',');
+  const result = await database.runAsync(
+    `UPDATE attendance SET synced = 1 WHERE id IN (${placeholders})`,
+    ...ids
+  );
+  return result.changes;
 }
 
 export async function getFacesDirectory(): Promise<string> {

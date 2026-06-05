@@ -51,12 +51,13 @@ async function pingHealth(baseUrl: string, timeoutMs = 6000): Promise<boolean> {
   }
 }
 
-/** Scan common LAN hosts on port 8000 (Mac IP may change on Wi‑Fi). */
+/** Scan LAN hosts on port 8000 (Mac IP may change on Wi‑Fi). */
 function buildLanScanCandidates(): string[] {
   const urls: string[] = [];
-  const prefixes = ['192.168.1', '192.168.0', '10.0.0'];
+  const prefixes = ['192.168.1', '192.168.0', '10.0.0', '172.20.10']; // 172.20.10.x = iPhone hotspot
   for (const prefix of prefixes) {
-    for (let host = 1; host <= 12; host++) {
+    const maxHost = prefix === '172.20.10' ? 15 : 40;
+    for (let host = 1; host <= maxHost; host++) {
       urls.push(`http://${prefix}.${host}:8000`);
     }
   }
@@ -106,29 +107,40 @@ export async function resolveFaceApiBaseUrl(): Promise<string> {
   const defaultUrl = getDefaultFaceApiUrl();
   const savedUrl = await readSavedUrl();
 
+  // Try default Mac URL first (fast path when IP is correct).
+  if (await pingHealth(defaultUrl, 4000)) {
+    if (defaultUrl !== savedUrl) await setFaceApiBaseUrl(defaultUrl);
+    cachedUrl = defaultUrl;
+    return defaultUrl;
+  }
+
   const priority = uniqueUrls([
     savedUrl,
-    defaultUrl,
     'http://192.168.1.4:8000',
-    'http://192.168.1.5:8000',
-  ]);
+    'http://192.168.1.1:8000',
+    'http://192.168.0.1:8000',
+    'http://172.20.10.1:8000',
+  ]).filter((u) => u !== defaultUrl);
 
   let found = await findReachableUrl(priority);
   if (!found) {
-    const scan = buildLanScanCandidates().filter((u) => !priority.includes(u));
-    found = await findReachableUrl(scan.slice(0, 24));
+    const scan = buildLanScanCandidates().filter(
+      (u) => u !== defaultUrl && !priority.includes(u)
+    );
+    // Scan in batches so iPhone does not hang too long.
+    for (let i = 0; i < scan.length && !found; i += 20) {
+      found = await findReachableUrl(scan.slice(i, i + 20));
+    }
   }
 
   if (found) {
-    if (found !== savedUrl) {
-      await setFaceApiBaseUrl(found);
-    }
+    await setFaceApiBaseUrl(found);
     cachedUrl = found;
     return found;
   }
 
-  cachedUrl = savedUrl ?? defaultUrl;
-  return cachedUrl;
+  cachedUrl = defaultUrl;
+  return defaultUrl;
 }
 
 export async function getFaceApiBaseUrl(): Promise<string> {
@@ -145,7 +157,7 @@ export async function checkFaceApiReachable(): Promise<boolean> {
 export async function connectFaceApi(): Promise<{ ok: boolean; url: string }> {
   resetFaceApiUrlCache();
   const url = await resolveFaceApiBaseUrl();
-  const ok = await pingHealth(url, 6000);
+  const ok = await pingHealth(url, 8000);
   return { ok, url };
 }
 
