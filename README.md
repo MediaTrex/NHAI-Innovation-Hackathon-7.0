@@ -95,7 +95,7 @@ For more solution details visit : [NHAI SecureID Solution Documentation](./docs/
 ## Project Demo
 
 <div style="display:flex; justify-content:center;">
-  <img src="./docs/images/solution.gif" alt="demo image" width="25%" height="540px" />
+  <img src="./docs/images/solution_gif.gif" alt="demo image" width="25%" height="540px" />
 </div>
 
 
